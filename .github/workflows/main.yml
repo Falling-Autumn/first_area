@@ -1,0 +1,35 @@
+name: C++ Build and Upload Artifacts
+
+# 在 push 或 pull request 时触发工作流
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 使用最新的 Ubuntu 操作系统进行编译
+
+    steps:
+      # Checkout 源代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 安装编译器 (如果需要可以安装特定版本)
+      - name: Install Dependencies
+        run: sudo apt-get install g++ make
+
+      # 编译代码
+      - name: Build C++ project
+        run: |
+          g++ -std=c++17 -o output_executable src/main.cpp
+
+      # 上传构建产物 (可执行文件)
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: compiled-binaries  # Artifact 的名称
+          path: ./output_executable  # 上传的文件或目录路径
